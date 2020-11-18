@@ -1,0 +1,27 @@
+name: "Release"
+
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - name: "Setup NodeJS"
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+          registry-url: "https://registry.npmjs.org/"
+      - name: "Cache Dependencies"
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules/
+          key: node-modules-${{ runner.os }}
+      - name: "Publish"
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
