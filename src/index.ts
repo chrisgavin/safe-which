@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import {promises as fsPromises} from "fs";
 import * as path from "path";
 
 export const isWindows = process.platform === "win32";
@@ -26,7 +25,7 @@ export async function safeWhich(program: string): Promise<string> {
 		for (let pathExt of pathExts) {
 			let completePath = path.join(searchPath, program + pathExt);
 			try {
-				await fsPromises.access(completePath, fs.constants.X_OK);
+				await fs.promises.access(completePath, fs.constants.X_OK);
 				return completePath;
 			}
 			catch (err) {
