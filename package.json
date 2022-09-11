@@ -16,7 +16,7 @@
 	"scripts": {
 		"build": "tsc",
 		"pretest": "npm install && npm run build",
-		"test": "ava --verbose --serial ./src/**",
+		"test": "ava --verbose --serial ./src/** --no-worker-threads",
 		"prepublishOnly": "npm install && npm run build && npm version --allow-same-version=true --git-tag-version=false ${GITHUB_REF#refs/tags/}"
 	},
 	"devDependencies": {
