@@ -1,5 +1,6 @@
 import test from "ava";
 import { safeWhich, isWindows } from "./index";
+import * as os from "os";
 import * as path from "path";
 
 const originalEnv = process.env;
@@ -68,6 +69,11 @@ if (isWindows) {
 else {
 	test("program is found if on path and executable", async (t) => {
 		process.env.PATH = path.join(testResources, "path");
+		t.deepEqual(await safeWhich("program"), path.join(testResources, "path", "program"));
+	});
+
+	test("does not throw if a non-directory file is on the search path", async (t) => {
+		process.env.PATH = path.join(testResources, "path/program") + path.delimiter + path.join(testResources, "path");
 		t.deepEqual(await safeWhich("program"), path.join(testResources, "path", "program"));
 	});
 
