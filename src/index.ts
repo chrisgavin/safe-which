@@ -29,9 +29,17 @@ export async function safeWhich(program: string): Promise<string> {
 				return completePath;
 			}
 			catch (err) {
-				if (err.code !== "ENOENT") {
-					throw err;
+				if (typeof err === "object" && err !== null && 'code' in err) {
+					if (err.code === "ENOTDIR") {
+						console.warn(`While resolving program ${program}, skipping ${searchPath} ` + 
+							"because it is not a directory.");
+						break;
+					}
+					if (err.code === "ENOENT") {
+						continue;
+					}
 				}
+				throw err;
 			}
 		}
 	}
